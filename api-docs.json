@@ -1,0 +1,797 @@
+{   
+    "openapi": "3.0.0",
+    "info": {
+        "description": "API NOTES Nadjib Amokrane ",
+        "title": "Notes",
+        "version": "1.0.0"
+    },
+
+    "components":{
+        "schemas":{
+            "Note":{
+                "type":"object",
+                "properties":{
+                    "id":{
+                        "type":"string",
+                        "format":"uuid"
+
+                    },
+                    "title":{
+                        "type":"string"
+
+                    },
+                    "text":{
+                        "type":"string"
+                    },
+                    "created_at":{
+                        "type":"object",
+                            "properties":{
+                                "$$date":{
+                                    "type":"integer"
+                            }
+                        }
+                    },
+                    "modifiedAt":{
+                        "type":"object",
+                        "properties":{
+                            "$$date":{
+                                "type":"integer"
+                            }
+                        }
+
+                    },
+                    "_id":{
+                        "type":"string"
+                    }
+
+                }
+            },
+            "NewNote":{
+                "type":"object",
+                "properties":{
+                    "title":{
+                        "type":"string"
+                    },
+                    "text":{
+                        "type":"string"
+                    }
+                },
+                "required": ["title", "text"]
+            }    
+        }
+    },            
+
+
+    "paths": {
+        "/api/notes": {
+            "get": {
+                "tags": ["Notes"],
+                "description": "Get all notes",
+                "security": [{"BearerAuth": []}],
+                "responses":{
+                    "200": {
+                        "content":{
+                            "application/json": {
+                                 "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "notes": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Note"
+                                            }
+                                        }
+                                    }
+                                 }
+                            }
+
+                        },
+                        "description": "Returns all notes"
+                    },
+                    "401":{
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                  },
+                                  "error": {
+                                        "type": "string",
+                                        "example": "Internal Server Error"
+                                  }
+                                }
+                              }
+                            }
+                        }
+                    }
+                      
+
+                    
+                },
+                "summary": "Returns notes"
+            },
+            "post": {
+                "tags": ["Notes"],
+                "description": "Add a note to the list of notes",
+                "security": [{"BearerAuth": []}],
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema": {
+                                "$ref":"#/components/schemas/NewNote"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "200": {
+                        "content":{
+                            "application/json": {
+                                 "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "notes": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Note"
+                                            }
+                                        }
+                                    }
+                                 }
+                            }
+
+                        },
+                        "description": "Add a note"
+                    },
+                    "401":{
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid token"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                  },
+                                  "error": {
+                                        "type": "string",
+                                        "example": "Internal Server Error"
+                                  }
+                                }
+                              }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error":{
+                                            "type": "string",
+                                            "example": "Missing required parameters"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                      
+
+                    
+                },
+                "summary": "Add note"
+            }                    
+        },
+            "/api/notes/{id}": {
+              "delete": {
+                "tags": ["Notes"],
+                "summary": "Delete a note by ID",
+                "description": "Deletes a note with the given ID.",
+                "security": [{"BearerAuth": []}],
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the note to delete",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "example": "60b8902f2a9b7c2dd2b29d7f"
+                    }
+                  }
+                ],
+               
+                "responses": {
+                  "200": {
+                    "description": "Success",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "notes": {
+                              "type": "array",
+                              "items": {
+                                "$ref": "#/components/schemas/Note"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "404": {
+                    "description": "Note not found",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Note not found"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "401":{
+                    "description": "Unauthorized",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "error": {
+                                        "type": "string",
+                                        "example": "Invalid token"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                  "500": {
+                    "description": "Internal server error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "error": {
+                              "type": "string",
+                              "example": "Internal server error"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "put": {
+                "tags": [
+                  "Notes"
+                ],
+                "summary": "Update a note by ID",
+                "description": "Updates a note with the specified ID.",
+                "security": [{"BearerAuth": []}],
+                "parameters": [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "description": "ID of the note to update",
+                    "required": true,
+                    "schema": {
+                      "type": "string",
+                      "example": "60b8902f2a9b7c2dd2b29d7f"
+                    }
+                    
+                  },
+                  {
+                    "name": "title",
+                    "in": "formData",
+                    "description": "New title for the note",
+                    "required": false,
+                    "schema": {
+                      "type": "string",
+                      "example":"New title"
+                    }
+                  },
+                  {
+                    "name": "text",
+                    "in": "formData",
+                    "description": "New text for the note",
+                    "required": false,
+                    "schema": {
+                      "type": "string",
+                      "example":"New text"
+                    }
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Note updated successfully",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": true
+                            },
+                            "notes": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "type": "string",
+                                    "example": "609e8209a53e13142885b6d5"
+                                  },
+                                  "title": {
+                                    "type": "string",
+                                    "example": "Updated note title"
+                                  },
+                                  "text": {
+                                    "type": "string",
+                                    "example": "Updated note"
+                                  },
+                                  "createdAt": {
+                                    "type": "string",
+                                    "example": "2022-05-15T19:30:12.207Z"
+                                  },
+                                  "updatedAt": {
+                                    "type": "string",
+                                    "example": "2022-05-15T19:31:47.537Z"
+                                  }
+                                  
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "404": {
+                    "description": "Note not found",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Note not found"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "401":{
+                    "description": "Unauthorized",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "error": {
+                                        "type": "string",
+                                        "example": "Invalid token"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                  "500": {
+                    "description": "Internal server error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": false
+                            },
+                            "error": {
+                              "type": "string",
+                              "example": "Internal server error"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              
+            }
+        },
+            "/notes/search": {
+              "get": {
+                "tags": ["Notes"],
+                "summary": "Search for a note by title",
+                "security": [{"BearerAuth": []}],
+                "parameters": [
+                  {
+                    "in": "query",
+                    "name": "title",
+                    "schema": {
+                      "type": "string"
+                    },
+                    "required": true,
+                    "description": "Title of the note to search for"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "Note found successfully",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "example": true
+                              
+                            },
+                            "note": {
+                              "type": "object",
+                              "example": "The note was found"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "404": {
+                    "description": "Note not found",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "description": "Flag indicating whether the note was found successfully"
+                            },
+                            "message": {
+                              "type": "string",
+                              "example": "Note not found"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "401":{
+                    "description": "Unauthorized",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                    },
+                                    "error": {
+                                        "type": "string",
+                                        "example": "Invalid token"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                  "500": {
+                    "description": "Internal server error",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "success": {
+                              "type": "boolean",
+                              "description": "Flag indicating whether the operation was successful"
+                            },
+                            "error": {
+                              "type": "string",
+                              "example": "Internal server error"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "/api/signup": {
+                "post": {
+                  "description": "Create a new user",
+                  "tags": ["User"],
+                "summary": "Create a new user",
+                
+                  "requestBody": {
+                    "required": true,
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "username": {
+                              "type": "string"
+                            },
+                            "email": {
+                              "type": "string",
+                              "format": "email"
+                            },
+                            "password": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["username", "email", "password"]
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "201": {
+                      "description": "User created successfully"
+                    },
+                    "400":{
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error":{
+                                            "type": "string",
+                                            "example": "Missing required parameters"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                  },
+                                  "error": {
+                                        "type": "string",
+                                        "example": "Internal Server Error"
+                                  }
+                                }
+                              }
+                            }
+                        }
+                    }
+                  }
+                }
+            },
+            "/api/login": {
+                "post": {
+                  "description": "Log in as user",
+                  "tags": ["User"],
+                  "summary": "Log in as user",
+                  "requestBody": {
+                    "description": "User credentials",
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "username": {
+                              "type": "string",
+                              "description": "The username of the user to be authenticated"
+                            },
+                            "password": {
+                              "type": "string",
+                              "description": "The password of the user to be authenticated"
+                            }
+                          },
+                          "required": [
+                            "username",
+                            "password"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "responses": {
+                    "200": {
+                      "description": "Successful login",
+                      "content": {
+                        "application/json": {
+                          "schema": {
+                            "type": "object",
+                            "properties": {
+                              "success": {
+                                "type": "boolean",
+                                "description": "Indicates whether the login was successful"
+                              },
+                              "token": {
+                                "type": "string",
+                                "description": "JWT token for authentication"
+                              }
+                            },
+                            "required": [
+                              "success",
+                              "token"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "400":{
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error":{
+                                            "type": "string",
+                                            "example": "Missing required parameters"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Unauthorized: Invalid username or password"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "success": {
+                                        "type": "boolean",
+                                        "example": false
+                                  },
+                                  "error": {
+                                        "type": "string",
+                                        "example": "Internal Server Error"
+                                  }
+                                }
+                              }
+                            }
+                        }
+                    }
+                  }
+                }
+            }
+
+            
+
+    }
+          
+            
+                
+    
+          
+
+}
+ 
+
+            
+
+
+    
