@@ -3,6 +3,10 @@ const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const path = require('path');
 
+// Import route modules
+const userRoutes = require('./routes/user'); // Ensure this file exists
+const noteRouter = require('./routes/notes'); // Ensure this file exists
+
 // Import API documentation
 const apiDocs = require('./api-docs.json');
 
@@ -14,14 +18,6 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Import route modules
-const userRoutes = require('./routes/user'); // Ensure this file exists
-const noteRouter = require('./routes/notes');
-
-// Register routes
-app.use('/api/notes', noteRouter);
-app.use('/api/user', userRoutes);
-
 // Swagger API documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
 
@@ -29,6 +25,10 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
 app.get('/', (req, res) => {
   res.send('Server is running!');
 });
+
+// Register routes
+app.use('/api/user', userRoutes);
+app.use('/api/notes', noteRouter);
 
 // Start the server
 app.listen(port, () => {
