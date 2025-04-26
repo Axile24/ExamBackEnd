@@ -1,0 +1,36 @@
+{
+  "name": "exambackend",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Axile24/ExamBackEnd.git"
+  },
+  "author": "Nad Amokrane",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Axile24/ExamBackEnd/issues"
+  },
+  "homepage": "https://github.com/Axile24/ExamBackEnd#readme",
+  "description": "",
+  "dependencies": {
+    "@seald-io/nedb": "^4.1.1",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "nedb": "^1.8.0",
+    "nedb-promises": "^6.2.3",
+    "swagger-ui-express": "^5.0.1",
+    "uid-random": "^1.0.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
