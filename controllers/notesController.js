@@ -23,5 +23,43 @@ const addNote = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+// delete note
 
-module.exports = { getAllNotes, addNote };
+const deleteNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ success: false, error: 'Note ID is required' });
+    }
+    const deletedNote = await notesPersist.deleteNote(id);
+    if (!deletedNote) {
+      return res.status(404).json({ success: false, error: 'Note not found' });
+    }
+    res.status(200).json({ success: true, message: 'Note deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+}
+// update note
+const updatedNote = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, text } = req.body;
+    if (!id || !title || !text) {
+      return res.status(400).json({ success: false, error: 'Note ID, title, and text are required' });
+    }
+    const updatedNote = await notesPersist.update(id, { title, text });
+    if (!updatedNote) {
+      return res.status(404).json({ success: false, error: 'Note not found' });
+    }
+    res.status(200).json({ success: true, note: updatedNote });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+// Export the controller functions    
+
+
+module.exports = { getAllNotes, addNote, deleteNote, updatedNote};
