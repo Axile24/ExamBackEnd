@@ -1,40 +1,35 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const path = require('path');
-
-// Import route modules
-const userRoutes = require('./routes/user'); // Ensure this file exists
-const noteRouter = require('./routes/notes'); // Ensure this file exists
-
-// Import API documentation
 const apiDocs = require('./api-docs.json');
+const userRoutes = require('./routes/user');
+const noteRoutes = require('./routes/notes');
+const userPersist = require('./models/userPersist');
+const notesPersist = require('./models/notesPersist');
 
-// Initialize Express app
+require('dotenv').config();
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Swagger API documentation
+// Routes
+app.use('/api/user', userRoutes); // signup & login
+app.use('/api/notes', noteRoutes); // CRUD operations on notes
+
+// Swagger Documentation
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(apiDocs));
-
-// Test route to verify server is running
-app.get('/', (req, res) => {
-  res.send('Server is running!');
-});
-
-// Register routes
-app.use('/api/user', userRoutes);
-app.use('/api/notes', noteRouter);
 
 // Start the server
 app.listen(port, () => {
-  console.log(`................SERVER is listening on http://localhost:${port}...`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
 
+// Log database connections
+console.log('Databases initialized: usersDataBase.db and notesDataBase.db');
 
 
 

@@ -1,20 +1,19 @@
 const Datastore = require('nedb-promises');
 const path = require('path');
 
-// Initialize the NeDB database
-const usersDB = Datastore.create({
+// Initialize the database
+const userDB = Datastore.create({
   filename: path.join(__dirname, '../databases/usersDataBase.db'),
   autoload: true,
 });
 
-// Find a user by email
-const findOne = async (query) => {
-  return await usersDB.findOne(query);
-};
+// Log when the database is connected
+console.log('Connected to users database: usersDataBase.db');
 
-// Add a new user
-const insert = async (user) => {
-  return await usersDB.insert(user);
-};
+// Find a single user by query
+const findOne = (query) => userDB.findOne(query);
+
+// Insert a new user into the database
+const insert = (user) => userDB.insert(user);
 
 module.exports = { findOne, insert };

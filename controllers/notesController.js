@@ -23,7 +23,6 @@ const addNote = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-// delete note
 
 const deleteNote = async (req, res) => {
   try {
@@ -40,9 +39,9 @@ const deleteNote = async (req, res) => {
     console.error(error);
     res.status(500).json({ success: false, error: error.message });
   }
-}
-// update note
-const updatedNote = async (req, res) => {
+};
+
+const updateNote = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, text } = req.body;
@@ -59,7 +58,6 @@ const updatedNote = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
-// Export the controller functions    
 
-
-module.exports = { getAllNotes, addNote, deleteNote, updatedNote};
+// Export the controller functions
+module.exports = { getAllNotes, addNote, deleteNote, updateNote };
